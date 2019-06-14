@@ -148,6 +148,7 @@ namespace BaGet.Extensions
             IConfiguration configuration)
         {
             services.ConfigureAndValidate<S3StorageOptions>(configuration.GetSection(nameof(BaGetOptions.Storage)));
+            services.ConfigureAndValidate<CloudfrontOptions>(configuration.GetSection("Cloudfront"));
 
             return services;
         }

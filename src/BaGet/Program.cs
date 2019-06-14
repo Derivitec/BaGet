@@ -10,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 
 namespace BaGet
 {
+    using BaGet.AWS;
+
     public class Program
     {
         public static void Main(string[] args)
@@ -59,6 +61,14 @@ namespace BaGet
                     var root = Environment.GetEnvironmentVariable("BAGET_CONFIG_ROOT");
                     if (!string.IsNullOrEmpty(root))
                         config.SetBasePath(root);
+
+                    config.AddDynamoDbConfiguration(
+                        options =>
+                        {
+                            options.AwsRegion = Environment.GetEnvironmentVariable("AwsRegion");
+                            options.Id = "nuget";
+                            options.TableName = "mgmt-config";
+                        });
                 });
 
         public static IHostBuilder CreateHostBuilder(string[] args)

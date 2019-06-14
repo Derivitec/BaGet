@@ -12,6 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BaGet
 {
+    using BaGet.Database.PostgreSql;
+
+    using Npgsql;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -47,10 +51,19 @@ namespace BaGet
             {
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
-                    scope.ServiceProvider
-                        .GetRequiredService<IContext>()
+                    var dbContext = scope.ServiceProvider
+                        .GetRequiredService<IContext>();
+
+                    dbContext
                         .Database
                         .Migrate();
+
+                    if (dbContext is PostgreSqlContext)
+                    {
+                        dbContext.Database.OpenConnection();
+                        ((NpgsqlConnection)dbContext.Database.GetDbConnection()).ReloadTypes();
+                        dbContext.Database.CloseConnection();
+                    }
                 }
             }
 

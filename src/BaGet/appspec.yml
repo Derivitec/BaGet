@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www/baget
+hooks:
+  BeforeInstall:
+    - location: /uninstall.sh
+  AfterInstall:
+    - location: /install.sh
