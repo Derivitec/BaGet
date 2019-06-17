@@ -4,10 +4,6 @@
 # Code deploy install steps for the Baget server
 #################################################################
 
-mkdir -p /var/www/baget
-unzip publish.zip
-cp -R ./publish/* /var/www/baget
-
 echo "[Unit]
 Description=Derivitec Nuget Server
 
