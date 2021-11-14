@@ -13,6 +13,8 @@ env:
     - SEMANTIC_SUFFIX
 phases:
   install:
+    runtime-versions:
+      dotnet: 3.1
     commands:
       - SEMANTIC_PREFIX=$BUILD_VERSION
       - SEMANTIC_SUFFIX=$BUILD_VERSION_SUFFIX$CODEBUILD_BUILD_NUMBER
