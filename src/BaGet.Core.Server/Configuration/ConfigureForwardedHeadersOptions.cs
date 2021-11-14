@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace BaGet.Configuration
@@ -18,7 +19,7 @@ namespace BaGet.Configuration
         /// <summary>
         /// The hosting environment.
         /// </summary>
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
         /// <summary>
         /// The cloudfront options.
@@ -31,7 +32,10 @@ namespace BaGet.Configuration
         /// <param name="cloudfrontOptions">
         /// The cloudfront options.
         /// </param>
-        public ConfigureForwardedHeadersOptions(IOptions<CloudfrontOptions> cloudfrontOptions, IHostingEnvironment hostingEnvironment)
+        /// <param name="hostingEnvironment">
+        /// The hosting env
+        /// </param>
+        public ConfigureForwardedHeadersOptions(IOptions<CloudfrontOptions> cloudfrontOptions, IWebHostEnvironment hostingEnvironment)
         {
             this.cloudfrontOptions = cloudfrontOptions;
             this.hostingEnvironment = hostingEnvironment;

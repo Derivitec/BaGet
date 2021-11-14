@@ -1,0 +1,47 @@
+version: 0.2
+
+env:
+  variables:
+    BUILD_VERSION: '1.1.0'
+    BUILD_VERSION_SUFFIX: alpha.
+    CODEBUILD_BUILD_NUMBER: '0'
+    EnvironmentName: CodeBuild
+    ASPNETCORE_ENVIRONMENT: CodeBuild
+  exported-variables:
+    - SEMANTIC_VERSION
+    - SEMANTIC_PREFIX
+    - SEMANTIC_SUFFIX
+phases:
+  install:
+    commands:
+      - SEMANTIC_PREFIX=$BUILD_VERSION
+      - SEMANTIC_SUFFIX=$BUILD_VERSION_SUFFIX$CODEBUILD_BUILD_NUMBER
+      - if [[ "$BUILD_VERSION_SUFFIX" == "" ]]; then JOINCHAR="."; else JOINCHAR="-"; fi
+      - SEMANTIC_VERSION=$SEMANTIC_PREFIX$JOINCHAR$SEMANTIC_SUFFIX
+      - echo Build $SEMANTIC_VERSION - preparing
+      - AwsRegion=$AWS_REGION
+
+  build:
+    commands:
+      - echo Build $SEMANTIC_VERSION - started
+      # build solution
+      - cd $CODEBUILD_SRC_DIR/src/BaGet
+      - dotnet publish -c Release -o $CODEBUILD_SRC_DIR/nuget
+
+  post_build:
+    commands:
+      - if [[ "$CODEBUILD_BUILD_SUCCEEDING" == "0" ]]; then exit 1; fi
+      # copy app specs
+      - cp $CODEBUILD_SRC_DIR/src/BaGet/install.sh $CODEBUILD_SRC_DIR/nuget/
+      - cp $CODEBUILD_SRC_DIR/src/BaGet/uninstall.sh $CODEBUILD_SRC_DIR/nuget/
+      - cp $CODEBUILD_SRC_DIR/src/BaGet/appspec.yml $CODEBUILD_SRC_DIR/nuget/
+artifacts:
+  files:
+    - 'nuget/**/*'
+  secondary-artifacts:
+    nuget:
+      files:
+        - '**/*'
+      name: $SEMANTIC_VERSION-nuget.zip
+      discard-paths: no
+      base-directory: nuget

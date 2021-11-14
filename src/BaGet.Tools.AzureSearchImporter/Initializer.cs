@@ -10,6 +10,7 @@ using Microsoft.Azure.Search.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MoreLinq;
+using Index = Microsoft.Azure.Search.Models.Index;
 
 namespace BaGet.Tools.AzureSearchImporter
 {

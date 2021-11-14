@@ -16,8 +16,8 @@ namespace BaGet.Core.Server.Extensions
             services
                 .AddMvc()
                 .AddApplicationPart(typeof(BaGet.Controllers.PackageController).Assembly)
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonOptions(options =>
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
                 });
